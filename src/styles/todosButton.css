@@ -1,0 +1,24 @@
+.todosButton {
+    display: flex;
+    width:   10%;
+    height:   10%;
+    padding-top:   10%; /* Asegúrate de que este valor no sea demasiado grande */
+    background-color: brown;
+    color: black;
+    box-sizing: border-box;
+    font-size: 1em; /* Asegúrate de que este valor sea apropiado para el tamaño del botón */
+    line-height: 1; /* Intenta ajustar la línea de base del texto */
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+  
+  /* Opcional: Agrega estilos para cuando el botón está activo o hover */
+  .todosButton:hover {
+    background-color: darkred;
+  }
+  
+  .todosButton:active {
+    background-color: brown;
+  }
