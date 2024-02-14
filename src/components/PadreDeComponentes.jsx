@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InputCategory } from './InputCategory';
-import { ListaItems } from './ListaItems';
+import { Category } from './Category';
 
 
 export const PadreDeComponentes = () => {
@@ -9,7 +9,7 @@ export const PadreDeComponentes = () => {
   return (
     <div>
       <InputCategory onInputChange={setInputValue} /> {/* Aquí pasamos setInputValue como onInputChange */}
-      <ListaItems inputValue={inputValue} />
+      <Category inputValue={inputValue} />
     </div>
   );
 }
