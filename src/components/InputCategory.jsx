@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const InputCategory = ({ onInputChange }) => {
+export const InputCategory = ({ onInputChange, obtenerCategorias }) => {
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    obtenerCategorias();
+  }, [inputValue]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
+
+
 
   const guardarInput = async (e) => {
     e.preventDefault();
@@ -23,6 +29,8 @@ export const InputCategory = ({ onInputChange }) => {
       if (response.ok) {
         console.log("Input guardado correctamente");
         setInputValue(""); // Limpiar el input después de guardar
+
+
       } else {
         console.error("Error al guardar el input");
       }
