@@ -2,17 +2,18 @@ import { useState, useEffect } from "react";
 import { InputCategory } from "./InputCategory";
 
 export const Category = () => {
-  const [categoria, setCategoria] = useState([]);
+  const [categorias, setCategoria] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [editandoValor, setEditandoValor] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const obtenerCategorias = async () => {
     try {
       const respuesta = await fetch(
         `https://testapisystemadministration.up.railway.app/category`
       );
-      const categoria = await respuesta.json();
-      setCategoria(categoria);
+      const {data} = await respuesta.json();
+      setCategoria(data);
     } catch (error) {
       console.error("Error al obtener datos:", error);
     }
@@ -35,8 +36,7 @@ export const Category = () => {
         const nuevaCategoriaAgregada = await respuesta.json();
         // Actualiza el estado local inmediatamente
         setCategoria((prevCategorias) => [...prevCategorias, nuevaCategoriaAgregada]);
-        // Después de agregar la categoría, obtén la lista actualizada de categorías
-        obtenerCategorias();
+
       } else {
         console.error("Error al agregar la categoría:", respuesta.status);
       }
@@ -44,9 +44,13 @@ export const Category = () => {
       console.error("Error al agregar la categoría:", error);
     }
   };
+
+
   useEffect(() => {
     obtenerCategorias(); // Obtener la lista de categorías al montar el componente
   }, []); // Se ejecuta solo una vez al montar el componente
+  
+  
   const handleUpdate = async (id) => {
     try {
       setEditandoId(id);
@@ -102,27 +106,34 @@ export const Category = () => {
     }
   };
 
+  const handleInputChange = (value) => {
+    setInputValue(value); // Actualizar el estado local con el nuevo valor del input
+  };
+
+
+
   return (
     <>
-      <InputCategory agregarCategoria={agregarCategoria} obtenerCategorias={obtenerCategorias} />
+      <InputCategory agregarCategoria={agregarCategoria} obtenerCategorias={obtenerCategorias} onInputChange={handleInputChange}/>
+
       <div>
-        {categoria.map((category, index) => (
+        {categorias.map((categoria, index) => (
           <div key={index}>
-            {editandoId === category.id ? (
+            {editandoId === categoria.id ? (
               <div>
                 <input
                   type="text"
                   value={editandoValor}
                   onChange={(e) => setEditandoValor(e.target.value)}
                 />
-                <button onClick={() => guardarEdicion(category.id)}>Guardar</button>
+                <button onClick={() => guardarEdicion(categoria.id)}>Guardar</button>
                 <button onClick={cancelarEdicion}>Cancelar</button>
               </div>
             ) : (
               <div>
-                <h3>{category.name}</h3>
-                <button onClick={() => handleUpdate(category.id)}>Editar</button>
-                <button onClick={() => handleDelete(category.id)}>Eliminar</button>
+                <h3>{categoria.name}</h3>
+                <button onClick={() => handleUpdate(categoria.id)}>Editar</button>
+                <button onClick={() => handleDelete(categoria.id)}>Eliminar</button>
               </div>
             )}
           </div>
