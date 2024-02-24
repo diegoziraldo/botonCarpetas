@@ -6,20 +6,44 @@ export const Product = ({ inputValue }) => {
   const [editandoId, setEditandoId] = useState(null); // Guarda el ID de la categoría que se está editando
   const [editandoValor, setEditandoValor] = useState(""); // Guarda el valor editado temporalmente
 
-  useEffect(() => {
-    const mostrarProductos = async () => {
-      try {
-        const respuesta = await fetch(
-          `https://testapisystemadministration.up.railway.app/product`
-        );
-        const producto = await respuesta.json();
-        setProducto(producto);
-      } catch (error) {
-        console.error("Error al obtener datos:", error);
+  const obtenerProductos = async () => {
+    try {
+      const respuesta = await fetch(
+        `https://testapisystemadministration.up.railway.app/product`
+      );
+      const producto = await respuesta.json();
+      setProducto(producto);
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+    }
+  };
+
+  /* Agregar los campos de la tabla */
+  const agregarProducto = async (nuevoProducto) => {
+    try {
+      const respuesta = await fetch(
+        `https://testapisystemadministration.up.railway.app/product`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: nuevoProducto }),
+        }
+      );
+
+      if (respuesta.ok) {
+        const nuevoProductoAgregado = await respuesta.json();
+        // Actualiza el estado local inmediatamente
+        setCategoria((prevProductos) => [...prevProductos, nuevoProductoAgregado]);
+      } else {
+        console.error("Error al agregar el producto:", respuesta.status);
       }
-    };
-    mostrarProductos();
-  }, [producto]);
+    } catch (error) {
+      console.error("Error al agregar el producto:", error);
+    }
+  };
+
 
   const handleUpdate = async (id) => {
     try {
@@ -27,7 +51,7 @@ export const Product = ({ inputValue }) => {
       setEditandoId(id);
 
       // Busca la categoría correspondiente al ID y guarda su valor para editar
-      const productoEditar = producto.find(cat => cat.id === id);
+      const productoEditar = producto.find(prod => prod.id === id);
       setEditandoValor(productoEditar.name);
     } catch (error) {
       console.error("Error al editar el producto:", error);
@@ -41,7 +65,7 @@ export const Product = ({ inputValue }) => {
 
   const guardarEdicion = async (id) => {
     try {
-      // Realiza una solicitud PATCH a la API para actualizar la categoría
+      // Realiza una solicitud PUT a la API para actualizar la categoría
       await fetch(
         `https://testapisystemadministration.up.railway.app/product`,
         {
@@ -78,7 +102,7 @@ export const Product = ({ inputValue }) => {
       );
 
       // Actualiza el estado para reflejar el cambio eliminando la categoría de la lista
-      setProducto(categoria.filter(cat => cat.id !== id));
+      setProducto(categoria.filter(prod => prod.id !== id));
     } catch (error) {
       console.error("Error al eliminar el producto:", error);
     }
@@ -87,8 +111,10 @@ export const Product = ({ inputValue }) => {
   return (
     <>
 
-    <InputProduct/>
+    <InputProduct agregarProducto={agregarProducto} obtenerProductos={obtenerProductos} />
     <div>
+    <h3>Productos</h3>
+    <table className="table">
       {producto.map((product, index) => (
         <div key={index}>
           {editandoId === product.id ? (
@@ -110,6 +136,7 @@ export const Product = ({ inputValue }) => {
           )}
         </div>
       ))}
+      </table>
     </div>
     </>
   );

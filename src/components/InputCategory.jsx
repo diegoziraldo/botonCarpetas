@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 
 export const InputCategory = ({ onInputChange, obtenerCategorias }) => {
   const [inputValue, setInputValue] = useState("");
+  const [count, setCount] = useState(0);
+  /* const [nuevaCategoria, setNuevaCategoria] = useState(""); */
 
-  useEffect(() => {
-    obtenerCategorias();
-  }, [inputValue]);
+
+/* useEffect(() => {
+  obtenerCategorias();
+}, [count]); */
+
 
   const handleChange = (e) => {
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    onInputChange(newValue);
   };
 
 
@@ -27,6 +33,7 @@ export const InputCategory = ({ onInputChange, obtenerCategorias }) => {
         }
       );
       if (response.ok) {
+        setCount(count+1);
         console.log("Input guardado correctamente");
         setInputValue(""); // Limpiar el input después de guardar
 
