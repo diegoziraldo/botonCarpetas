@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { InputCategory } from "./InputCategory";
 
+
 export const Category = () => {
-  const [categorias, setCategoria] = useState([]);
+  const [categoria, setCategoria] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [editandoValor, setEditandoValor] = useState("");
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    obtenerCategorias();
+  }, []);
 
   const obtenerCategorias = async () => {
     try {
@@ -110,30 +115,28 @@ export const Category = () => {
     setInputValue(value); // Actualizar el estado local con el nuevo valor del input
   };
 
-
-
   return (
     <>
       <InputCategory agregarCategoria={agregarCategoria} obtenerCategorias={obtenerCategorias} onInputChange={handleInputChange}/>
 
       <div>
-        {categorias.map((categoria, index) => (
+        {categoria.map((category, index) => (
           <div key={index}>
-            {editandoId === categoria.id ? (
+            {editandoId === category.id ? (
               <div>
                 <input
                   type="text"
                   value={editandoValor}
                   onChange={(e) => setEditandoValor(e.target.value)}
                 />
-                <button onClick={() => guardarEdicion(categoria.id)}>Guardar</button>
+                <button onClick={() => guardarEdicion(category.id)}>Guardar</button>
                 <button onClick={cancelarEdicion}>Cancelar</button>
               </div>
             ) : (
               <div>
-                <h3>{categoria.name}</h3>
-                <button onClick={() => handleUpdate(categoria.id)}>Editar</button>
-                <button onClick={() => handleDelete(categoria.id)}>Eliminar</button>
+                <h3>{category.name}</h3>
+                <button onClick={() => handleUpdate(category.id)}>Editar</button>
+                <button onClick={() => handleDelete(category.id)}>Eliminar</button>
               </div>
             )}
           </div>

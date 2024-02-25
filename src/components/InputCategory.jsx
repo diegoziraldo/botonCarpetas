@@ -6,9 +6,9 @@ export const InputCategory = ({ onInputChange, obtenerCategorias }) => {
   /* const [nuevaCategoria, setNuevaCategoria] = useState(""); */
 
 
-/* useEffect(() => {
+useEffect(() => {
   obtenerCategorias();
-}, [count]); */
+}, [count]);
 
 
   const handleChange = (e) => {

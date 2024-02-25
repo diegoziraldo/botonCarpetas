@@ -108,9 +108,22 @@ export const Product = ({ inputValue }) => {
     }
   };
 
+  const obtenerCategorias = async () => {
+    try {
+      const respuesta = await fetch(
+        `https://testapisystemadministration.up.railway.app/category`
+      );
+      const {data} = await respuesta.json();
+      setCategoria(data);
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+    }
+  };
+
+
+
   return (
     <>
-
     <InputProduct agregarProducto={agregarProducto} obtenerProductos={obtenerProductos} />
     <div>
     <h3>Productos</h3>
